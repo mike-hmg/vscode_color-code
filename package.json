@@ -1,0 +1,241 @@
+{
+	"name": "colorcode",
+	"displayName": "ColorCode",
+	"description": "Customize colors for files and folders in your workspace",
+	"publisher": "ColorCode",
+	"version": "1.0.0",
+	"license": "MIT",
+	"icon": "resources/images/icon.png",
+	"engines": {
+		"vscode": "^1.92.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"keywords": [
+		"file",
+		"folder",
+		"color",
+		"customization"
+	],
+	"pricing": "Free",
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"configuration": {
+			"title": "ColorCode",
+			"properties": {
+				"colorcode.items": {
+					"type": "array",
+					"title": "Colorized Items",
+					"items": {
+						"type": "object",
+						"properties": {
+							"path": {
+								"type": "string",
+								"description": "Path to the file or folder"
+							},
+							"color": {
+								"type": "string",
+								"description": "Color for the item (e.g., #ff0000 or colormanagement.AnsiColor1)"
+							}
+						},
+						"required": [
+							"path",
+							"color"
+						]
+					},
+					"default": []
+				}
+			}
+		},
+		"menus": {
+			"explorer/context": [
+				{
+					"when": "resourceFilename",
+					"command": "colorcode.setFileColor",
+					"group": "1_modification@1"
+				},
+				{
+					"when": "resourceFilename",
+					"command": "colorcode.clearFileColor",
+					"group": "1_modification@2"
+				},
+				{
+					"when": "explorerResourceIsFolder",
+					"command": "colorcode.setFolderColor",
+					"group": "navigation@1"
+				},
+				{
+					"when": "explorerResourceIsFolder",
+					"command": "colorcode.clearFolderColor",
+					"group": "navigation@2"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "colorcode.setFileColor",
+				"title": "Set File Color",
+				"category": "ColorCode"
+			},
+			{
+				"command": "colorcode.clearFileColor",
+				"title": "Clear File Color",
+				"category": "ColorCode"
+			},
+			{
+				"command": "colorcode.setFolderColor",
+				"title": "Set Folder Color",
+				"category": "ColorCode"
+			},
+			{
+				"command": "colorcode.clearFolderColor",
+				"title": "Clear Folder Color",
+				"category": "ColorCode"
+			}
+		],
+		"colors": [
+			{
+				"id": "colormanagement.AnsiColor1",
+				"defaults": {
+					"dark": "#800000",
+					"light": "#800000"
+				},
+				"description": "Red"
+			},
+			{
+				"id": "colormanagement.AnsiColor2",
+				"defaults": {
+					"dark": "#008000",
+					"light": "#008000"
+				},
+				"description": "Green"
+			},
+			{
+				"id": "colormanagement.AnsiColor3",
+				"defaults": {
+					"dark": "#808000",
+					"light": "#808000"
+				},
+				"description": "Yellow"
+			},
+			{
+				"id": "colormanagement.AnsiColor4",
+				"defaults": {
+					"dark": "#000080",
+					"light": "#000080"
+				},
+				"description": "Blue"
+			},
+			{
+				"id": "colormanagement.AnsiColor5",
+				"defaults": {
+					"dark": "#800080",
+					"light": "#800080"
+				},
+				"description": "Purple"
+			},
+			{
+				"id": "colormanagement.AnsiColor6",
+				"defaults": {
+					"dark": "#008080",
+					"light": "#008080"
+				},
+				"description": "Teal"
+			},
+			{
+				"id": "colormanagement.AnsiColor7",
+				"defaults": {
+					"dark": "#c0c0c0",
+					"light": "#c0c0c0"
+				},
+				"description": "Silver"
+			},
+			{
+				"id": "colormanagement.AnsiColor8",
+				"defaults": {
+					"dark": "#808080",
+					"light": "#808080"
+				},
+				"description": "Grey"
+			},
+			{
+				"id": "colormanagement.AnsiColor9",
+				"defaults": {
+					"dark": "#ff0000",
+					"light": "#ff0000"
+				},
+				"description": "Light Red"
+			},
+			{
+				"id": "colormanagement.AnsiColor10",
+				"defaults": {
+					"dark": "#00ff00",
+					"light": "#00ff00"
+				},
+				"description": "Light Green"
+			},
+			{
+				"id": "colormanagement.AnsiColor11",
+				"defaults": {
+					"dark": "#ffff00",
+					"light": "#ffff00"
+				},
+				"description": "Light Yellow"
+			},
+			{
+				"id": "colormanagement.AnsiColor12",
+				"defaults": {
+					"dark": "#0000ff",
+					"light": "#0000ff"
+				},
+				"description": "Light Blue"
+			},
+			{
+				"id": "colormanagement.AnsiColor13",
+				"defaults": {
+					"dark": "#ff00ff",
+					"light": "#ff00ff"
+				},
+				"description": "Magenta"
+			},
+			{
+				"id": "colormanagement.AnsiColor14",
+				"defaults": {
+					"dark": "#00ffff",
+					"light": "#00ffff"
+				},
+				"description": "Cyan"
+			},
+			{
+				"id": "colormanagement.AnsiColor15",
+				"defaults": {
+					"dark": "#ffffff",
+					"light": "#ffffff"
+				},
+				"description": "White"
+			},
+			{
+				"id": "colormanagement.AnsiColor16",
+				"defaults": {
+					"dark": "#ff8000",
+					"light": "#ff8000"
+				},
+				"description": "Orange"
+			}
+		]
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"type": "commonjs",
+	"devDependencies": {
+		"@types/vscode": "^1.92.0",
+		"esbuild": "^0.27.3",
+		"typescript": "^5.9.3"
+	}
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vs/2009/package">
+  <Metadata>
+    <Identity Language="en-US" Id="colorcode" Version="1.0.0" Publisher="ColorCode" Name="ColorCode" Description="Customize colors for files and folders in your workspace" />
+    <Tags>file, folder, color, customization</Tags>
+    <Categories>Other</Categories>
+    <License>MIT</License>
+  </Resources>
+  <Engine Version="1.92.0" />
+</PackageManifest>
