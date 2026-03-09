@@ -24,11 +24,11 @@ const COLORS = [
     { id: 'colormanagement.AnsiColor16', label: 'Orange', color: '#ff8000' },
 ];
 
-const DECORATION_TYPE_KEY = 'colorcode.decoration';
+const decorationEmitter = new vscode.EventEmitter<vscode.Uri | undefined>();
 
 function getColorItems(): ColorItem[] {
     const config = vscode.workspace.getConfiguration('colorcode');
-    return config.get<ColorItem[]>('items', []);
+    return config.get<ColorItem[]>('items', []) ?? [];
 }
 
 async function saveColorItems(items: ColorItem[]): Promise<void> {
@@ -44,49 +44,34 @@ function getPathForResource(resource: vscode.Uri): string {
     return resource.fsPath;
 }
 
-function applyDecorations() {
-    const items = getColorItems();
-    const decorationsMap = new Map<string, vscode.TextEditorDecorationType>();
-
-    for (const item of items) {
-        const color = item.color.startsWith('colormanagement.') 
-            ? COLORS.find(c => c.id === item.color)?.color || item.color
-            : item.color;
-
-        const decoration = vscode.window.createTextEditorDecorationType({
-            before: {
-                contentText: '\u2B24',
-                color: color,
-                margin: '0 5px 0 0',
-                fontSize: '10px',
-                lineHeight: '100%'
-            }
-        });
-        decorationsMap.set(item.path, decoration);
+function getDecorationColor(resource: vscode.Uri): string | vscode.ThemeColor | undefined {
+    const path = getPathForResource(resource);
+    const match = getColorItems().find(item => item.path === path);
+    if (!match) {
+        return undefined;
     }
 
-    for (const editor of vscode.window.textEditors) {
-        const document = editor.document;
-        if (!document.uri.path) { continue; }
-
-        const relativePath = vscode.workspace.asRelativePath(document.uri, false);
-        const decoration = decorationsMap.get(relativePath);
-        
-        if (decoration) {
-            const fullRange = new vscode.Range(
-                document.positionAt(0),
-                document.positionAt(document.getText().length)
-            );
-            editor.setDecorations(decoration, [fullRange]);
-        }
+    if (match.color.startsWith('colormanagement.')) {
+        return new vscode.ThemeColor(match.color);
     }
-
-    decorationsMap.forEach((decoration, path) => {
-        if (!items.find(i => i.path === path)) {
-            decoration.dispose();
-        }
-    });
+    return match.color;
 }
+
+const fileDecorationProvider: vscode.FileDecorationProvider = {
+    onDidChangeFileDecorations: decorationEmitter.event,
+
+    provideFileDecoration(uri: vscode.Uri): vscode.ProviderResult<vscode.FileDecoration> {
+        const color = getDecorationColor(uri);
+        if (!color) {
+            return;
+        }
+
+        return {
+            tooltip: 'ColorCode',
+            color,
+        };
+    }
+};
 
 async function pickColor(): Promise<string | undefined> {
     const items = COLORS.map(c => ({
@@ -103,13 +88,13 @@ async function pickColor(): Promise<string | undefined> {
     return selected?.colorId;
 }
 
-async function setColor(uri: vscode.Uri): Promise<void> {
+async function setColor(resource: vscode.Uri): Promise<void> {
     const color = await pickColor();
     if (!color) { return; }
 
-    const path = getPathForResource(uri);
+    const path = getPathForResource(resource);
     const items = getColorItems();
-    
+
     const existingIndex = items.findIndex(item => item.path === path);
     if (existingIndex >= 0) {
         items[existingIndex].color = color;
@@ -119,15 +104,14 @@ async function setColor(uri: vscode.Uri): Promise<void> {
 
     await saveColorItems(items);
     vscode.window.showInformationMessage(`Color set for ${path}`);
-    applyDecorations();
+    decorationEmitter.fire(resource);
 }
 
-async function clearColor(uri: vscode.Uri): Promise<void> {
-    const path = getPathForResource(uri);
+async function clearColor(resource: vscode.Uri): Promise<void> {
+    const path = getPathForResource(resource);
     const items = getColorItems();
-    
+
     const filtered = items.filter(item => item.path !== path);
-    
     if (filtered.length === items.length) {
         vscode.window.showInformationMessage('No color found to clear');
         return;
@@ -135,21 +119,19 @@ async function clearColor(uri: vscode.Uri): Promise<void> {
 
     await saveColorItems(filtered);
     vscode.window.showInformationMessage(`Color cleared for ${path}`);
-    applyDecorations();
+    decorationEmitter.fire(resource);
 }
 
 export function activate(context: vscode.ExtensionContext): void {
     context.subscriptions.push(
-        vscode.commands.registerCommand('colorcode.setFileColor', async () => {
-            const uri = vscode.window.activeTextEditor?.document.uri;
-            if (uri) { await setColor(uri); }
+        vscode.commands.registerCommand('colorcode.setFileColor', async (resource: vscode.Uri) => {
+            if (resource) { await setColor(resource); }
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand('colorcode.clearFileColor', async () => {
-            const uri = vscode.window.activeTextEditor?.document.uri;
-            if (uri) { await clearColor(uri); }
+        vscode.commands.registerCommand('colorcode.clearFileColor', async (resource: vscode.Uri) => {
+            if (resource) { await clearColor(resource); }
         })
     );
 
@@ -165,15 +147,17 @@ export function activate(context: vscode.ExtensionContext): void {
         })
     );
 
-    vscode.workspace.onDidChangeTextDocument(() => {
-        applyDecorations();
-    });
+    context.subscriptions.push(vscode.window.registerFileDecorationProvider(fileDecorationProvider));
 
-    vscode.window.onDidChangeActiveTextEditor(() => {
-        applyDecorations();
-    });
-
-    applyDecorations();
+    context.subscriptions.push(
+        vscode.workspace.onDidChangeConfiguration(event => {
+            if (event.affectsConfiguration('colorcode.items')) {
+                decorationEmitter.fire(undefined);
+            }
+        })
+    );
 }
 
-export function deactivate(): void {}
+export function deactivate(): void {
+    decorationEmitter.dispose();
+}

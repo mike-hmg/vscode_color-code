@@ -1,0 +1,16 @@
+// {
+//     "colorcode.items": [
+//         {
+//             "path": "colorcode-1.1.3.vsix",
+//             "color": "colormanagement.AnsiColor3"
+//         },
+//         {
+//             "path": "esbuild.js",
+//             "color": "colormanagement.AnsiColor2"
+//         },
+//         {
+//             "path": "tsconfig.json",
+//             "color": "colormanagement.AnsiColor4"
+//         }
+//     ]
+// }

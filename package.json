@@ -3,9 +3,10 @@
 	"displayName": "ColorCode",
 	"description": "Customize colors for files and folders in your workspace",
 	"publisher": "ColorCode",
-	"version": "1.0.0",
+	"version": "1.1.3",
 	"license": "MIT",
-	"icon": "resources/images/icon.png",
+	"icon": "resources/images/icon.jpg",
+	"repository": "https://github.com/mike-hmg/vscode_color-code.git",
 	"engines": {
 		"vscode": "^1.92.0"
 	},
@@ -101,128 +102,128 @@
 			{
 				"id": "colormanagement.AnsiColor1",
 				"defaults": {
-					"dark": "#800000",
-					"light": "#800000"
+					"dark": "#d63031",
+					"light": "#d63031"
 				},
 				"description": "Red"
 			},
 			{
 				"id": "colormanagement.AnsiColor2",
 				"defaults": {
-					"dark": "#008000",
-					"light": "#008000"
+					"dark": "#00b894",
+					"light": "#00b894"
 				},
 				"description": "Green"
 			},
 			{
 				"id": "colormanagement.AnsiColor3",
 				"defaults": {
-					"dark": "#808000",
-					"light": "#808000"
+					"dark": "#fdcb6e",
+					"light": "#fdcb6e"
 				},
 				"description": "Yellow"
 			},
 			{
 				"id": "colormanagement.AnsiColor4",
 				"defaults": {
-					"dark": "#000080",
-					"light": "#000080"
+					"dark": "#0984e3",
+					"light": "#0984e3"
 				},
 				"description": "Blue"
 			},
 			{
 				"id": "colormanagement.AnsiColor5",
 				"defaults": {
-					"dark": "#800080",
-					"light": "#800080"
+					"dark": "#a29bfe",
+					"light": "#a29bfe"
 				},
 				"description": "Purple"
 			},
 			{
 				"id": "colormanagement.AnsiColor6",
 				"defaults": {
-					"dark": "#008080",
-					"light": "#008080"
+					"dark": "#00cec9",
+					"light": "#00cec9"
 				},
 				"description": "Teal"
 			},
 			{
 				"id": "colormanagement.AnsiColor7",
 				"defaults": {
-					"dark": "#c0c0c0",
-					"light": "#c0c0c0"
+					"dark": "#b2bec3",
+					"light": "#b2bec3"
 				},
 				"description": "Silver"
 			},
 			{
 				"id": "colormanagement.AnsiColor8",
 				"defaults": {
-					"dark": "#808080",
-					"light": "#808080"
+					"dark": "#636e72",
+					"light": "#636e72"
 				},
 				"description": "Grey"
 			},
 			{
 				"id": "colormanagement.AnsiColor9",
 				"defaults": {
-					"dark": "#ff0000",
-					"light": "#ff0000"
+					"dark": "#ff7675",
+					"light": "#ff7675"
 				},
 				"description": "Light Red"
 			},
 			{
 				"id": "colormanagement.AnsiColor10",
 				"defaults": {
-					"dark": "#00ff00",
-					"light": "#00ff00"
+					"dark": "#55efc4",
+					"light": "#55efc4"
 				},
 				"description": "Light Green"
 			},
 			{
 				"id": "colormanagement.AnsiColor11",
 				"defaults": {
-					"dark": "#ffff00",
-					"light": "#ffff00"
+					"dark": "#ffeaa7",
+					"light": "#ffeaa7"
 				},
 				"description": "Light Yellow"
 			},
 			{
 				"id": "colormanagement.AnsiColor12",
 				"defaults": {
-					"dark": "#0000ff",
-					"light": "#0000ff"
+					"dark": "#74b9ff",
+					"light": "#74b9ff"
 				},
 				"description": "Light Blue"
 			},
 			{
 				"id": "colormanagement.AnsiColor13",
 				"defaults": {
-					"dark": "#ff00ff",
-					"light": "#ff00ff"
+					"dark": "#e84393",
+					"light": "#e84393"
 				},
 				"description": "Magenta"
 			},
 			{
 				"id": "colormanagement.AnsiColor14",
 				"defaults": {
-					"dark": "#00ffff",
-					"light": "#00ffff"
+					"dark": "#81ecec",
+					"light": "#81ecec"
 				},
 				"description": "Cyan"
 			},
 			{
 				"id": "colormanagement.AnsiColor15",
 				"defaults": {
-					"dark": "#ffffff",
-					"light": "#ffffff"
+					"dark": "#dfe6e9",
+					"light": "#dfe6e9"
 				},
 				"description": "White"
 			},
 			{
 				"id": "colormanagement.AnsiColor16",
 				"defaults": {
-					"dark": "#ff8000",
-					"light": "#ff8000"
+					"dark": "#e17055",
+					"light": "#e17055"
 				},
 				"description": "Orange"
 			}
@@ -237,5 +238,10 @@
 		"@types/vscode": "^1.92.0",
 		"esbuild": "^0.27.3",
 		"typescript": "^5.9.3"
+	},
+	"__metadata": {
+		"installedTimestamp": 1773044126479,
+		"targetPlatform": "undefined",
+		"size": 96468
 	}
 }

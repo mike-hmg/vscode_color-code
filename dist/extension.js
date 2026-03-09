@@ -1,1 +1,183 @@
-"use strict";var C=Object.create;var s=Object.defineProperty;var w=Object.getOwnPropertyDescriptor;var h=Object.getOwnPropertyNames;var b=Object.getPrototypeOf,A=Object.prototype.hasOwnProperty;var x=(e,o)=>{for(var n in o)s(e,n,{get:o[n],enumerable:!0})},d=(e,o,n,r)=>{if(o&&typeof o=="object"||typeof o=="function")for(let i of h(o))!A.call(e,i)&&i!==n&&s(e,i,{get:()=>o[i],enumerable:!(r=w(o,i))||r.enumerable});return e};var I=(e,o,n)=>(n=e!=null?C(b(e)):{},d(o||!e||!e.__esModule?s(n,"default",{value:e,enumerable:!0}):n,e)),T=e=>d(s({},"__esModule",{value:!0}),e);var E={};x(E,{activate:()=>y,deactivate:()=>P});module.exports=T(E);var t=I(require("vscode")),g=[{id:"colormanagement.AnsiColor1",label:"Red",color:"#800000"},{id:"colormanagement.AnsiColor2",label:"Green",color:"#008000"},{id:"colormanagement.AnsiColor3",label:"Yellow",color:"#808000"},{id:"colormanagement.AnsiColor4",label:"Blue",color:"#000080"},{id:"colormanagement.AnsiColor5",label:"Purple",color:"#800080"},{id:"colormanagement.AnsiColor6",label:"Teal",color:"#008080"},{id:"colormanagement.AnsiColor7",label:"Silver",color:"#c0c0c0"},{id:"colormanagement.AnsiColor8",label:"Grey",color:"#808080"},{id:"colormanagement.AnsiColor9",label:"Light Red",color:"#ff0000"},{id:"colormanagement.AnsiColor10",label:"Light Green",color:"#00ff00"},{id:"colormanagement.AnsiColor11",label:"Light Yellow",color:"#ffff00"},{id:"colormanagement.AnsiColor12",label:"Light Blue",color:"#0000ff"},{id:"colormanagement.AnsiColor13",label:"Magenta",color:"#ff00ff"},{id:"colormanagement.AnsiColor14",label:"Cyan",color:"#00ffff"},{id:"colormanagement.AnsiColor15",label:"White",color:"#ffffff"},{id:"colormanagement.AnsiColor16",label:"Orange",color:"#ff8000"}];function l(){return t.workspace.getConfiguration("colorcode").get("items",[])}async function p(e){await t.workspace.getConfiguration("colorcode").update("items",e,t.ConfigurationTarget.Workspace)}function u(e){return t.workspace.getWorkspaceFolder(e)?t.workspace.asRelativePath(e,!1):e.fsPath}function a(){let e=l(),o=new Map;for(let n of e){let r=n.color.startsWith("colormanagement.")&&g.find(c=>c.id===n.color)?.color||n.color,i=t.window.createTextEditorDecorationType({before:{contentText:"\u2B24",color:r,margin:"0 5px 0 0",fontSize:"10px",lineHeight:"100%"}});o.set(n.path,i)}for(let n of t.window.textEditors){let r=n.document;if(!r.uri.path)continue;let i=t.workspace.asRelativePath(r.uri,!1),c=o.get(i);if(c){let v=new t.Range(r.positionAt(0),r.positionAt(r.getText().length));n.setDecorations(c,[v])}}o.forEach((n,r)=>{e.find(i=>i.path===r)||n.dispose()})}async function k(){let e=g.map(n=>({label:n.label,description:n.color,colorId:n.id,color:n.color}));return(await t.window.showQuickPick(e,{placeHolder:"Select a color"}))?.colorId}async function m(e){let o=await k();if(!o)return;let n=u(e),r=l(),i=r.findIndex(c=>c.path===n);i>=0?r[i].color=o:r.push({path:n,color:o}),await p(r),t.window.showInformationMessage(`Color set for ${n}`),a()}async function f(e){let o=u(e),n=l(),r=n.filter(i=>i.path!==o);if(r.length===n.length){t.window.showInformationMessage("No color found to clear");return}await p(r),t.window.showInformationMessage(`Color cleared for ${o}`),a()}function y(e){e.subscriptions.push(t.commands.registerCommand("colorcode.setFileColor",async()=>{let o=t.window.activeTextEditor?.document.uri;o&&await m(o)})),e.subscriptions.push(t.commands.registerCommand("colorcode.clearFileColor",async()=>{let o=t.window.activeTextEditor?.document.uri;o&&await f(o)})),e.subscriptions.push(t.commands.registerCommand("colorcode.setFolderColor",async o=>{o&&await m(o)})),e.subscriptions.push(t.commands.registerCommand("colorcode.clearFolderColor",async o=>{o&&await f(o)})),t.workspace.onDidChangeTextDocument(()=>{a()}),t.window.onDidChangeActiveTextEditor(()=>{a()}),a()}function P(){}0&&(module.exports={activate,deactivate});
+"use strict";
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/extension.ts
+var extension_exports = {};
+__export(extension_exports, {
+  activate: () => activate,
+  deactivate: () => deactivate
+});
+module.exports = __toCommonJS(extension_exports);
+var vscode = __toESM(require("vscode"));
+var COLORS = [
+  { id: "colormanagement.AnsiColor1", label: "Red", color: "#800000" },
+  { id: "colormanagement.AnsiColor2", label: "Green", color: "#008000" },
+  { id: "colormanagement.AnsiColor3", label: "Yellow", color: "#808000" },
+  { id: "colormanagement.AnsiColor4", label: "Blue", color: "#000080" },
+  { id: "colormanagement.AnsiColor5", label: "Purple", color: "#800080" },
+  { id: "colormanagement.AnsiColor6", label: "Teal", color: "#008080" },
+  { id: "colormanagement.AnsiColor7", label: "Silver", color: "#c0c0c0" },
+  { id: "colormanagement.AnsiColor8", label: "Grey", color: "#808080" },
+  { id: "colormanagement.AnsiColor9", label: "Light Red", color: "#ff0000" },
+  { id: "colormanagement.AnsiColor10", label: "Light Green", color: "#00ff00" },
+  { id: "colormanagement.AnsiColor11", label: "Light Yellow", color: "#ffff00" },
+  { id: "colormanagement.AnsiColor12", label: "Light Blue", color: "#0000ff" },
+  { id: "colormanagement.AnsiColor13", label: "Magenta", color: "#ff00ff" },
+  { id: "colormanagement.AnsiColor14", label: "Cyan", color: "#00ffff" },
+  { id: "colormanagement.AnsiColor15", label: "White", color: "#ffffff" },
+  { id: "colormanagement.AnsiColor16", label: "Orange", color: "#ff8000" }
+];
+var decorationEmitter = new vscode.EventEmitter();
+function getColorItems() {
+  const config = vscode.workspace.getConfiguration("colorcode");
+  return config.get("items", []) ?? [];
+}
+async function saveColorItems(items) {
+  const config = vscode.workspace.getConfiguration("colorcode");
+  await config.update("items", items, vscode.ConfigurationTarget.Workspace);
+}
+function getPathForResource(resource) {
+  const workspaceFolder = vscode.workspace.getWorkspaceFolder(resource);
+  if (workspaceFolder) {
+    return vscode.workspace.asRelativePath(resource, false);
+  }
+  return resource.fsPath;
+}
+function getDecorationColor(resource) {
+  const path = getPathForResource(resource);
+  const match = getColorItems().find((item) => item.path === path);
+  if (!match) {
+    return void 0;
+  }
+  if (match.color.startsWith("colormanagement.")) {
+    return new vscode.ThemeColor(match.color);
+  }
+  return match.color;
+}
+var fileDecorationProvider = {
+  onDidChangeFileDecorations: decorationEmitter.event,
+  provideFileDecoration(uri) {
+    const color = getDecorationColor(uri);
+    if (!color) {
+      return;
+    }
+    return {
+      tooltip: "ColorCode",
+      color
+    };
+  }
+};
+async function pickColor() {
+  const items = COLORS.map((c) => ({
+    label: c.label,
+    description: c.color,
+    colorId: c.id,
+    color: c.color
+  }));
+  const selected = await vscode.window.showQuickPick(items, {
+    placeHolder: "Select a color"
+  });
+  return selected?.colorId;
+}
+async function setColor(resource) {
+  const color = await pickColor();
+  if (!color) {
+    return;
+  }
+  const path = getPathForResource(resource);
+  const items = getColorItems();
+  const existingIndex = items.findIndex((item) => item.path === path);
+  if (existingIndex >= 0) {
+    items[existingIndex].color = color;
+  } else {
+    items.push({ path, color });
+  }
+  await saveColorItems(items);
+  vscode.window.showInformationMessage(`Color set for ${path}`);
+  decorationEmitter.fire(resource);
+}
+async function clearColor(resource) {
+  const path = getPathForResource(resource);
+  const items = getColorItems();
+  const filtered = items.filter((item) => item.path !== path);
+  if (filtered.length === items.length) {
+    vscode.window.showInformationMessage("No color found to clear");
+    return;
+  }
+  await saveColorItems(filtered);
+  vscode.window.showInformationMessage(`Color cleared for ${path}`);
+  decorationEmitter.fire(resource);
+}
+function activate(context) {
+  context.subscriptions.push(
+    vscode.commands.registerCommand("colorcode.setFileColor", async (resource) => {
+      if (resource) {
+        await setColor(resource);
+      }
+    })
+  );
+  context.subscriptions.push(
+    vscode.commands.registerCommand("colorcode.clearFileColor", async (resource) => {
+      if (resource) {
+        await clearColor(resource);
+      }
+    })
+  );
+  context.subscriptions.push(
+    vscode.commands.registerCommand("colorcode.setFolderColor", async (resource) => {
+      if (resource) {
+        await setColor(resource);
+      }
+    })
+  );
+  context.subscriptions.push(
+    vscode.commands.registerCommand("colorcode.clearFolderColor", async (resource) => {
+      if (resource) {
+        await clearColor(resource);
+      }
+    })
+  );
+  context.subscriptions.push(vscode.window.registerFileDecorationProvider(fileDecorationProvider));
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration("colorcode.items")) {
+        decorationEmitter.fire(void 0);
+      }
+    })
+  );
+}
+function deactivate() {
+  decorationEmitter.dispose();
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  activate,
+  deactivate
+});
+//# sourceMappingURL=extension.js.map
